@@ -14,16 +14,16 @@ public class AccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
-        showSignUpScreen();
+      //  showSignUpScreen();
     }
 
 
-    // function to load login fragment in activity
-    public void showLoginScreen(){
-     //   getSupportFragmentManager().beginTransaction().replace(R.id.frag,new LoginFragment()).commit();
-    }
-    // function to call signup fragment in activity
-    public void showSignUpScreen(){
-      //  getSupportFragmentManager().beginTransaction().replace(R.id.frag,new RegisterFragment()).commit();
-    }
+//    // function to load login fragment in activity
+//    public void showLoginScreen(){
+//     //   getSupportFragmentManager().beginTransaction().replace(R.id.frag,new LoginFragment()).commit();
+//    }
+//    // function to call signup fragment in activity
+//    public void showSignUpScreen(){
+//      //  getSupportFragmentManager().beginTransaction().replace(R.id.frag,new RegisterFragment()).commit();
+//    }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,11 +33,12 @@ public class RegisterFragment extends Fragment {
     TextView tv_login;
     Button btnRegister;
     private Dialog loadingDialog;
+    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_register, container, false);
+         view= inflater.inflate(R.layout.fragment_register, container, false);
         /////loading dialog
         loadingDialog=new Dialog(getContext());
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
@@ -52,7 +54,9 @@ public class RegisterFragment extends Fragment {
         tv_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((AccountActivity)getActivity()).showLoginScreen();
+
+                Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_loginFragment);
+
             }
         });
 
@@ -105,6 +109,6 @@ public class RegisterFragment extends Fragment {
         myRef.child("Mail").setValue(etRegisterEmail.getText().toString());
         loadingDialog.dismiss();
         Toast.makeText(getContext(),"Registration successful",Toast.LENGTH_LONG).show();
-        ((AccountActivity)getActivity()).showLoginScreen();
+        Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_loginFragment);
     }
 }

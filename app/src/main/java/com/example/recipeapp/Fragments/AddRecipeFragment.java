@@ -29,6 +29,7 @@ import android.webkit.MimeTypeMap;
 import android.webkit.PermissionRequest;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -64,6 +65,7 @@ public class AddRecipeFragment extends Fragment  implements
     String type;
     Spinner spinner;
     String[] types = { "Morning", "Lunch", "Dinner"};
+    Button btnSaveRecord;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -82,6 +84,13 @@ public class AddRecipeFragment extends Fragment  implements
             @Override
             public void onClick(View view) {
                  addImage();
+            }
+        });
+        btnSaveRecord=view.findViewById(R.id.button);
+        btnSaveRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveRecord();
             }
         });
         spinner=view.findViewById(R.id.spinner);
@@ -107,7 +116,7 @@ public class AddRecipeFragment extends Fragment  implements
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-                                openCamera();
+                                openGallery();
                             }
                         }
 
@@ -125,12 +134,11 @@ public class AddRecipeFragment extends Fragment  implements
     }
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
-    public void openCamera(){
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, 1);
-
+    public void openGallery(){
+        Intent intent=new Intent(Intent.ACTION_PICK,android.provider. MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent,1);
     }
-    public void saveRecord(View view){
+    public void saveRecord(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
             if(description.getText().toString().isEmpty()){
                 description.setError("required");
@@ -221,9 +229,8 @@ public class AddRecipeFragment extends Fragment  implements
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            imgUri = getImageUri(photo);
-            recipe_img.setImageBitmap(photo);
+            imgUri  = data.getData();
+            recipe_img.setImageURI(imgUri);
 
         }
 
