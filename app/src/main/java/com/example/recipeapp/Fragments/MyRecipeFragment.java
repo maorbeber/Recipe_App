@@ -38,7 +38,7 @@ import java.util.ArrayList;
 public class MyRecipeFragment extends Fragment {
     RecyclerView recylerView;
     private Dialog loadingDialog;
-    ArrayList<Recipe> recipeArrayList =new ArrayList<Recipe>();
+    public static ArrayList<Recipe> recipeArrayList =new ArrayList<Recipe>();
     RecipeAdapter recipeAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -140,7 +140,7 @@ public class MyRecipeFragment extends Fragment {
                             } else if (options[item].equals("Cancel")) {
                                 dialog.dismiss();
                             } else if (options[item].equals("Update")) {
-                                Constant.INDEX =position;
+                                Constant.INDEX = position;
                                startActivity(new Intent(getContext(), EditRecipeActivity.class));
                                dialog.dismiss();
                             }

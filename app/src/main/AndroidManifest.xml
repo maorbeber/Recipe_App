@@ -17,7 +17,7 @@
         android:theme="@style/Theme.RecipeApp"
         tools:targetApi="31">
         <activity
-            android:name=".EditRecipeActivity"
+            android:name=".Screens.EditRecipeActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

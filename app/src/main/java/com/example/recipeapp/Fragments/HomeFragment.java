@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
           RecyclerView recylerView;
     private Dialog loadingDialog;
-ArrayList<Recipe> recipeArrayList =new ArrayList<Recipe>();
+ ArrayList<Recipe> recipeArrayList =new ArrayList<Recipe>();
     RecipeAdapter recipeAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

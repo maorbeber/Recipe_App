@@ -35,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.recipeapp.MainActivity;
 import com.example.recipeapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,8 +55,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.UUID;
 
-public class AddRecipeFragment extends Fragment  implements
-        AdapterView.OnItemSelectedListener {
+public class AddRecipeFragment extends Fragment  {
 
     ImageView recipe_img;
     Uri imgUri=null;
@@ -98,16 +98,22 @@ public class AddRecipeFragment extends Fragment  implements
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         spinner.setAdapter(aa);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+               type = parent.getItemAtPosition(position).toString();
+
+            } // to close the onItemSelected
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
         return view;
     }
-    @Override
-    public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-       type=types[position];
-    }
-    @Override
-    public void onNothingSelected(AdapterView<?> arg0) {
-        // TODO Auto-generated method stub
-    }
+
     public  void addImage(){
         Dexter.withActivity(getActivity())
                 .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -174,6 +180,8 @@ public class AddRecipeFragment extends Fragment  implements
                             loadingDialog.dismiss();
                             Toast.makeText(getContext(),"record added", Toast.LENGTH_LONG).show();
 
+                            ((MainActivity)getActivity()).showHomeScreen();
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -234,12 +242,6 @@ public class AddRecipeFragment extends Fragment  implements
 
         }
 
-    }
-    public Uri getImageUri( Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
     }
     // get the extension of file
     private String getFileEx(Uri uri){
