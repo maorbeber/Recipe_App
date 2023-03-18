@@ -1,5 +1,7 @@
 package com.example.recipeapp.Fragments;
 
+import static com.example.recipeapp.Utils.Constant.setUserId;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipeapp.MainActivity;
+import com.example.recipeapp.Model.Recipe;
 import com.example.recipeapp.R;
 import com.example.recipeapp.Screens.AccountActivity;
 import com.example.recipeapp.Utils.Constant;
@@ -25,6 +28,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class LoginFragment extends Fragment {
@@ -90,11 +99,18 @@ public class LoginFragment extends Fragment {
                     Toast.makeText(getContext(), "wrong mail or password" + task.getException(), Toast.LENGTH_LONG).show();
                 } else if (task.isSuccessful()) {
                     Constant.setUserLoginStatus(getContext(),true);
-                    openHomeActivity();
+                    FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                    if (firebaseUser != null) {
+                        setUserId(getContext(),firebaseUser.getUid());
+                        openHomeActivity();
+                    }
+
                 }
             }
         });
     }
+
+
 
     private void openHomeActivity() {
         startActivity(new Intent(getActivity(), MainActivity.class));

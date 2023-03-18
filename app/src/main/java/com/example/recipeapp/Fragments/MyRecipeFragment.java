@@ -1,7 +1,12 @@
 package com.example.recipeapp.Fragments;
 
+import static com.example.recipeapp.Utils.Constant.getUserId;
+
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +23,8 @@ import android.widget.TextView;
 
 import com.example.recipeapp.Model.Recipe;
 import com.example.recipeapp.R;
+import com.example.recipeapp.Screens.EditRecipeActivity;
+import com.example.recipeapp.Utils.Constant;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,16 +35,16 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 
-public class HomeFragment extends Fragment {
-          RecyclerView recylerView;
+public class MyRecipeFragment extends Fragment {
+    RecyclerView recylerView;
     private Dialog loadingDialog;
-ArrayList<Recipe> recipeArrayList =new ArrayList<Recipe>();
+    ArrayList<Recipe> recipeArrayList =new ArrayList<Recipe>();
     RecipeAdapter recipeAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_recipe, container, false);
         recylerView=view.findViewById(R.id.recylerView);
 
         recylerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -60,19 +67,17 @@ ArrayList<Recipe> recipeArrayList =new ArrayList<Recipe>();
     public void getData(){
         recipeArrayList.clear();
         loadingDialog.show();
-        DatabaseReference databaseReference=  FirebaseDatabase.getInstance().getReference().child("Recipes");
+        DatabaseReference databaseReference=  FirebaseDatabase.getInstance().getReference().child("Recipes").child(getUserId(getContext()));
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
-                    for(DataSnapshot dataSnapshot2:dataSnapshot1.getChildren()){
-                        recipeArrayList.add(new Recipe(
-                                dataSnapshot2.child("Description").getValue(String.class),
-                                dataSnapshot2.child("Image").getValue(String.class),
-                                dataSnapshot2.child("Type").getValue(String.class),
-                                dataSnapshot2.child("Id").getValue(String.class)
-                        ));
-                    }
+                    recipeArrayList.add(new Recipe(
+                            dataSnapshot1.child("Description").getValue(String.class),
+                            dataSnapshot1.child("Image").getValue(String.class),
+                            dataSnapshot1.child("Type").getValue(String.class),
+                            dataSnapshot1.child("Id").getValue(String.class)
+                    ));
                 }
 
                 recipeAdapter=new RecipeAdapter();
@@ -119,11 +124,31 @@ ArrayList<Recipe> recipeArrayList =new ArrayList<Recipe>();
                     .fit()
                     .centerCrop()
                     .into(holder.imageView);
-
-
-
-
-
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final CharSequence[] options = {"Update","Delete", "Cancel"};
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Select option");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int item) {
+                            if (options[item].equals("Delete")) {
+                                FirebaseDatabase.getInstance().getReference("Recipes").child(getUserId(getContext())).child(recipeArrayList.get(position).getId()).removeValue();
+                                getData();
+                                dialog.dismiss();
+                            } else if (options[item].equals("Cancel")) {
+                                dialog.dismiss();
+                            } else if (options[item].equals("Update")) {
+                                Constant.INDEX =position;
+                               startActivity(new Intent(getContext(), EditRecipeActivity.class));
+                               dialog.dismiss();
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+            });
 
         }
 
@@ -141,6 +166,7 @@ ArrayList<Recipe> recipeArrayList =new ArrayList<Recipe>();
                 description=item.findViewById(R.id.description);
                 type=item.findViewById(R.id.type);
                 imageView=item.findViewById(R.id.imageView);
+                cardView=item.findViewById(R.id.cardView);
             }
         }
     }
