@@ -9,16 +9,30 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.recipeapp.DatabaseService.DbHelper;
 import com.example.recipeapp.Fragments.AddRecipeFragment;
+import com.example.recipeapp.Fragments.CasheRecipeFragment;
 import com.example.recipeapp.Fragments.HomeFragment;
 import com.example.recipeapp.Fragments.MyRecipeFragment;
+import com.example.recipeapp.Model.RandomRecipeAPIResponse;
+import com.example.recipeapp.Model.Recipe;
 import com.example.recipeapp.Screens.AccountActivity;
+import com.example.recipeapp.Service.RequestManager;
+import com.example.recipeapp.lisner.RandomRecipeResponseListener;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
@@ -35,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         ActionBarDrawerToggle toogle=new ActionBarDrawerToggle(this,drawer, (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar),R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toogle);
         toogle.syncState();
+        APICall();
         getSupportFragmentManager().beginTransaction().replace(R.id.frag,new HomeFragment()).commit();
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -58,6 +73,10 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.frag,new AddRecipeFragment()).commit();
 
                         break;
+                        case R.id.cashe_recipe:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frag,new CasheRecipeFragment()).commit();
+
+                        break;
                 }
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
@@ -68,4 +87,44 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.frag,new HomeFragment()).commit();
 
         }
-}
+
+
+        public void APICall(){
+            List<String> tags = new ArrayList<>();
+            tags.clear();
+            tags.add("main course");
+            RequestManager manager=new RequestManager(this);
+            manager.getRandomRecipes(randomRecipeResponseListener, tags);
+
+
+
+
+        }
+
+    private final RandomRecipeResponseListener randomRecipeResponseListener = new RandomRecipeResponseListener() {
+        @Override
+        public void didFetch(RandomRecipeAPIResponse response, String message) {
+
+                 ArrayList<Recipe> recipeArrayList=response.recipes;
+
+
+                 Log.d("result",recipeArrayList.toString());
+
+                 for(int i=0;i<recipeArrayList.size();i++){
+                         Recipe recipe =new Recipe(recipeArrayList.get(i).title,recipeArrayList.get(i).aggregateLikes
+                         ,recipeArrayList.get(i).servings,recipeArrayList.get(i).readyInMinutes,recipeArrayList.get(i).image);
+                    new  DbHelper(MainActivity.this)
+                            .addRecipe(recipe);
+
+            }
+
+
+        }
+
+        @Override
+        public void didError(String message) {
+
+        }
+
+    };
+    }

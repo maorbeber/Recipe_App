@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.recipeapp.Model.Recipe;
+import com.example.recipeapp.Model.MyRecipe;
 import com.example.recipeapp.R;
 import com.example.recipeapp.Screens.EditRecipeActivity;
 import com.example.recipeapp.Utils.Constant;
@@ -38,7 +38,7 @@ import java.util.ArrayList;
 public class MyRecipeFragment extends Fragment {
     RecyclerView recylerView;
     private Dialog loadingDialog;
-    public static ArrayList<Recipe> recipeArrayList =new ArrayList<Recipe>();
+    public static ArrayList<MyRecipe> recipeArrayList =new ArrayList<MyRecipe>();
     RecipeAdapter recipeAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,7 +72,7 @@ public class MyRecipeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
-                    recipeArrayList.add(new Recipe(
+                    recipeArrayList.add(new MyRecipe(
                             dataSnapshot1.child("Description").getValue(String.class),
                             dataSnapshot1.child("Image").getValue(String.class),
                             dataSnapshot1.child("Type").getValue(String.class),

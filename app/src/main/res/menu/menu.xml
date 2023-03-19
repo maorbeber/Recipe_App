@@ -12,7 +12,10 @@
         android:id="@+id/add_recipe"
         android:icon="@drawable/ic_baseline_food_bank_24"
         android:title="Add Recipe"/>
-
+    <item
+        android:id="@+id/cashe_recipe"
+        android:icon="@drawable/ic_baseline_food_bank_24"
+        android:title="Cashe Recipe"/>
     <item
         android:id="@+id/_logout"
         android:icon="@drawable/ic_baseline_logout_24"

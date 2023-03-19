@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.recipeapp.Model.Recipe;
+import com.example.recipeapp.Model.MyRecipe;
 import com.example.recipeapp.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,8 +31,9 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
           RecyclerView recylerView;
     private Dialog loadingDialog;
- ArrayList<Recipe> recipeArrayList =new ArrayList<Recipe>();
+ ArrayList<MyRecipe> recipeArrayList =new ArrayList<MyRecipe>();
     RecipeAdapter recipeAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class HomeFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
                     for(DataSnapshot dataSnapshot2:dataSnapshot1.getChildren()){
-                        recipeArrayList.add(new Recipe(
+                        recipeArrayList.add(new MyRecipe(
                                 dataSnapshot2.child("Description").getValue(String.class),
                                 dataSnapshot2.child("Image").getValue(String.class),
                                 dataSnapshot2.child("Type").getValue(String.class),

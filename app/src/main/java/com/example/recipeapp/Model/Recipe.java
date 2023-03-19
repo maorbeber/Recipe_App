@@ -1,32 +1,39 @@
 package com.example.recipeapp.Model;
 
+import java.util.ArrayList;
+
+
 public class Recipe {
-    String description,image,type,id;
 
-    public Recipe(String description, String image, String type, String id) {
-        this.description = description;
+
+    public int id;
+
+
+    public int aggregateLikes;
+
+    public String title;
+    public int readyInMinutes;
+    public int servings;
+    public String image;
+
+
+    public Recipe(String title, int aggregateLikes, int servings, int readyInMinutes , String image) {
+        this.title = title;
         this.image = image;
-        this.type = type;
-        this.id = id;
+        this.servings=servings;
+        this.aggregateLikes=aggregateLikes;
+        this.readyInMinutes=readyInMinutes;
+
     }
-    public Recipe(String description, String image) {
-        this.description = description;
+    public Recipe(int id, String title, int aggregateLikes, int servings, int readyInMinutes , String image) {
+        this.title = title;
         this.image = image;
+        this.servings=servings;
+        this.aggregateLikes=aggregateLikes;
+        this.readyInMinutes=readyInMinutes;
+        this.id=id;
+
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getId() {
-        return id;
-    }
 }
+
