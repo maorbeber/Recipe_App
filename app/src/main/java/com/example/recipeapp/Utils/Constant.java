@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class Constant {
 
     public static int INDEX;
@@ -26,5 +30,24 @@ public class Constant {
     public static void setUserId(Context context , String s){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.edit().putString("id", s).commit();
+    }
+
+    public static String getPreviousDate(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString("PreviousDate", "");
+    }
+
+    public static void setPreviousDate(Context context , String s){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putString("PreviousDate", s).commit();
+    }
+
+
+
+
+    public static String getCurrentDate(){
+        Date date = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        return   df.format(date);
     }
 }

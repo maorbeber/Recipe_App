@@ -25,6 +25,7 @@ import com.example.recipeapp.Model.RandomRecipeAPIResponse;
 import com.example.recipeapp.Model.Recipe;
 import com.example.recipeapp.Screens.AccountActivity;
 import com.example.recipeapp.Service.RequestManager;
+import com.example.recipeapp.Utils.Constant;
 import com.example.recipeapp.lisner.RandomRecipeResponseListener;
 import com.google.android.material.navigation.NavigationView;
 
@@ -49,7 +50,12 @@ public class MainActivity extends AppCompatActivity {
         ActionBarDrawerToggle toogle=new ActionBarDrawerToggle(this,drawer, (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar),R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toogle);
         toogle.syncState();
-        APICall();
+
+                // call the api if current date is different from previous date its mean we call the api after 24 hours
+        if(!Constant.getCurrentDate().equals(Constant.getPreviousDate(this))){
+            APICall();
+        }
+
         getSupportFragmentManager().beginTransaction().replace(R.id.frag,new HomeFragment()).commit();
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -117,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                             .addRecipe(recipe);
 
             }
+                 Constant.setPreviousDate(MainActivity.this,Constant.getCurrentDate());
 
 
         }
