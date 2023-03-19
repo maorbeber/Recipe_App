@@ -8,8 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +16,7 @@ import android.view.MenuItem;
 
 import com.example.recipeapp.DatabaseService.DbHelper;
 import com.example.recipeapp.Fragments.AddRecipeFragment;
-import com.example.recipeapp.Fragments.CasheRecipeFragment;
+import com.example.recipeapp.Fragments.CacheRecipeFragment;
 import com.example.recipeapp.Fragments.HomeFragment;
 import com.example.recipeapp.Fragments.MyRecipeFragment;
 import com.example.recipeapp.Model.RandomRecipeAPIResponse;
@@ -31,9 +29,6 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
@@ -80,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
                         break;
                         case R.id.cashe_recipe:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frag,new CasheRecipeFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frag,new CacheRecipeFragment()).commit();
 
                         break;
                 }

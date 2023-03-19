@@ -17,14 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.recipeapp.DatabaseService.DbHelper;
-import com.example.recipeapp.Model.MyRecipe;
 import com.example.recipeapp.Model.Recipe;
 import com.example.recipeapp.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class CasheRecipeFragment extends Fragment {
+public class CacheRecipeFragment extends Fragment {
 
     RecyclerView recylerView;
     private Dialog loadingDialog;
